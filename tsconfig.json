@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "./dist",
+    "module": "commonjs",
+    "target": "es2022",
+    "lib": ["es2022"],
+    "esModuleInterop": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "sourceMap": true
+  },
+  "include": [
+    "api/**/*",
+    "connections/**/*",
+    "models/**/*",
+    "routes/**/*",
+    "controllers/**/*",
+    "services/**/*",
+    "middlewares/**/*",
+    "config/**/*",
+    "helpers/**/*",
+    "types/**/*",
+    "validations/**/*",
+    "constants/**/*",
+    "server.ts"
+  ]
+}
