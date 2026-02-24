@@ -9,7 +9,7 @@ import sequelize from "../connections/db";
 
 const sellerDashboardService = {
   getStats: async (req: Request) => {
-    const sellerId = req.user!.id;
+    const sellerId = (req as any).user.id;
 
     // Total products
     const totalProducts = await Product.count({

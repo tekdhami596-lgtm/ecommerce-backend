@@ -83,7 +83,7 @@ const User = sequelize.define(
   },
   {
     tableName: "users",
-    underscored: true, // camelCase → snake_case in DB
+    underscored: true, //
     timestamps: true,
   },
 );

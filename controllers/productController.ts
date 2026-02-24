@@ -46,7 +46,6 @@ const productController = {
     res: Response,
     next: NextFunction,
   ) => {
-   
     try {
       let product = await productService.create(req);
       res.send({
@@ -64,7 +63,7 @@ const productController = {
   ) => {
     try {
       const productId = req.params.id;
-      const userId = req.user!.id;
+      const userId = (req as any).user.id;
       await productService.deleteSellerProduct(productId, userId);
 
       return res.status(200).send({
@@ -82,10 +81,9 @@ const productController = {
     res: Response,
     next: NextFunction,
   ) => {
-  
     try {
       const productId = req.params.id as string;
-      const userId = req.user!.id;
+      const userId = (req as any).user.id;
 
       const files = req.files as Express.Multer.File[] | undefined;
 

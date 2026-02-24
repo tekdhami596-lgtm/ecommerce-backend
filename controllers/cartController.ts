@@ -4,7 +4,7 @@ import cartService from "../services/cartService"
 const cartController = {
   addToCart: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await cartService.addToCart(req.user?.id!, req.body.productId);
+      await cartService.addToCart((req as any).user.id, req.body.productId);
       res.send({ data: { msg: "Cart updated" } });
     } catch (err) {
       next(err);
@@ -33,7 +33,7 @@ const cartController = {
 
   getCart: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const data = await cartService.getCart(req.user?.id!);
+      const data = await cartService.getCart((req as any).user.id);
       res.send({ data });
     } catch (err) {
       next(err);

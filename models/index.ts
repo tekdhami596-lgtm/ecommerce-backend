@@ -11,12 +11,12 @@ import Banner from "./Banner";
 // ─── User ↔ Product (seller) ──────────────────────────────
 User.hasMany(Product, {
   as: "products",
-  foreignKey: "user_id",
+  foreignKey: "userId",
 });
 
 Product.belongsTo(User, {
   as: "seller",
-  foreignKey: "user_id",
+  foreignKey: "userId",
 });
 
 // ─── Product ↔ Category (many-to-many) ───────────────────

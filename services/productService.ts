@@ -119,7 +119,7 @@ const productService = {
 
   getSellerProducts: async (req: Request) => {
     return await Product.findAll({
-      where: { userId: req.user?.id },
+      where: { userId: (req as any).user.id },
       include: [{ model: ProductImage, as: "images", attributes: ["path"] }],
     });
   },
@@ -225,7 +225,7 @@ const productService = {
     const product = await Product.create({
       title: req.body.title,
       price: req.body.price,
-      userId: req.user!.id,
+      userId: (req as any).user.id,
       stock: req.body.stock,
       shortDescription: req.body.shortDescription,
       description: req.body.description,

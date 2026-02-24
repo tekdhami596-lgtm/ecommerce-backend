@@ -1,15 +1,9 @@
 import { Sequelize } from "sequelize";
-import "pg";
-
-const sequelize = new Sequelize(process.env.DATABASE_URL!, {
-  dialect: "postgres",
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false,
-    },
+const sequelize = new Sequelize(
+  "postgres://postgres:postgres@localhost:5438/postgres",
+  {
+    logging: false,
   },
-  logging: false,
-});
+);
 
 export default sequelize;

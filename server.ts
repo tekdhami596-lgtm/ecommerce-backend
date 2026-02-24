@@ -1,45 +1,48 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
-import sequelize from "./connections/db";
-import appRoutes from "./routes/index";
-import "./models/index";
-import errorHandler from "./middlewares/errorHandlers";
+import approutes from "./routes/index";
 import cookieParser from "cookie-parser";
+import "./models/index";
+import sequelize from "./connections/db";
+import cloudinary from "./config/cloudinary";
 
 const app = express();
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: "http://localhost:5173",
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   }),
 );
-
-app.use(cookieParser());
 app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 
-let isDbConnected = false;
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
+app.use("/api", approutes);
 
-const connectDB = async () => {
-  if (!isDbConnected) {
+const PORT = process.env.PORT || 8001;
+
+const checkConnectionDB = async () => {
+  try {
     await sequelize.authenticate();
 
-    isDbConnected = true;
-    console.log("✅ Database connected");
+    await sequelize.sync({ alter: true });
+
+    app.listen(PORT, () => {
+      console.log(`server running at http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+    process.exit(1);
   }
 };
 
-connectDB();
-
-app.get("/", (req, res) => {
-  res.json({ status: "ok", message: "API is running" });
-});
-
-app.use("/api", appRoutes);
-
-app.use(errorHandler);
-
-export default app;
+checkConnectionDB();

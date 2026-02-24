@@ -1,28 +1,48 @@
 {
+  // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
-    "rootDir": "./",
-    "outDir": "./dist",
-    "module": "commonjs",
-    "target": "es2022",
-    "lib": ["es2022"],
-    "esModuleInterop": true,
-    "strict": false,
+    // File Layout
+    // "rootDir": "./src",
+    // "outDir": "./dist",
+
+    // Environment Settings
+    // See also https://aka.ms/tsconfig/module
+    "module": "nodenext",
+    "target": "esnext",
+    "types": [],
+    // For nodejs:
+    // "lib": ["esnext"],
+    // "types": ["node"],
+    // and npm install -D @types/node
+
+    // Other Outputs
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Style Options
+    // "noImplicitReturns": true,
+    // "noImplicitOverride": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    // "noFallthroughCasesInSwitch": true,
+    // "noPropertyAccessFromIndexSignature": true,
+
+    // Recommended Options
+    "strict": true,
+    "jsx": "react-jsx",
+    "verbatimModuleSyntax": false,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
     "skipLibCheck": true,
-    "sourceMap": true
+    "esModuleInterop": true
   },
-  "include": [
-    "api/**/*",
-    "connections/**/*",
-    "models/**/*",
-    "routes/**/*",
-    "controllers/**/*",
-    "services/**/*",
-    "middlewares/**/*",
-    "config/**/*",
-    "helpers/**/*",
-    "types/**/*",
-    "validations/**/*",
-    "constants/**/*",
-    "server.ts"
-, "db.ts"  ]
+  "ts-node": {
+    "files": true
+  }
 }
