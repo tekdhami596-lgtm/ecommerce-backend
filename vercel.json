@@ -1,12 +1,15 @@
 {
+  "version": 2,
+  "builds": [
+    {
+      "src": "/server.ts",
+      "use": "@vercel/node"
+    }
+  ],
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "https://ecommerce-backend-chi-rouge.vercel.app/api/:path*"
-    },
-    {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": "/server.ts"
     }
   ]
 }
