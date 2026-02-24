@@ -13,7 +13,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin:process.env.FRONTEND_URL || "https://ecommerce-frontend-six-teal.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   }),
@@ -22,10 +22,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-  next();
-});
 app.use("/api", approutes);
 
 const PORT = process.env.PORT || 8001;
@@ -33,16 +29,12 @@ const PORT = process.env.PORT || 8001;
 const checkConnectionDB = async () => {
   try {
     await sequelize.authenticate();
-
-    await sequelize.sync({ alter: true });
-
-    app.listen(PORT, () => {
-      console.log(`server running at http://localhost:${PORT}`);
-    });
+    await sequelize.sync();
   } catch (error) {
     console.error("Unable to connect to the database:", error);
-    process.exit(1);
   }
 };
 
 checkConnectionDB();
+
+export default app;
