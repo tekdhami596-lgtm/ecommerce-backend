@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   cancelOrderController,
   createOrderController,
+  deleteOrderController,
   getMyOrdersController,
   getOrderByIdController,
   trackOrderController,
@@ -16,5 +17,6 @@ router.get("/my-orders", getMyOrdersController);
 router.get("/:id", getOrderByIdController);
 router.get("/track/:reference", trackOrderController);
 router.patch("/:id/cancel", cancelOrderController);
+router.delete("/:id", deleteOrderController);
 
 export default router;
