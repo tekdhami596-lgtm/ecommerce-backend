@@ -31,17 +31,17 @@ const authController = {
         httpOnly: true,
         secure: true,
         sameSite: "none",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    
       });
 
-      // res.send(result);
+      
       res.send({ success: true, user });
     } catch (err) {
       next(err);
     }
   },
 
-  // ── New: clear the cookie on logout ───────────────────────────────────────
+  
   logout: (req: Request, res: Response) => {
     res.clearCookie("token", {
       httpOnly: true,
