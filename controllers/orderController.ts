@@ -8,6 +8,7 @@ import {
 } from "../services/orderService";
 import { verifyEsewaPayment } from "../services/EsewaService";
 import { Reference } from "joi";
+import Order from "../models/Order";
 
 // ── Create Order ──────────────────────────────────────────────────────────────
 
@@ -175,6 +176,42 @@ export const cancelOrderController = async (
       res.status(400).json({ message: err.message });
       return;
     }
+    next(err);
+  }
+};
+
+export const deleteOrderController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      res.status(401).json({ message: "User not authenticated" });
+      return;
+    }
+
+    const orderId = Number(req.params.id);
+    if (isNaN(orderId)) {
+      res.status(400).json({ message: "Invalid order ID" });
+      return;
+    }
+
+    const order = await Order.findOne({ where: { id: orderId, userId } });
+    if (!order) {
+      res.status(404).json({ message: "Order not found" });
+      return;
+    }
+
+    if (order.getDataValue("orderStatus") !== "cancelled") {
+      res.status(400).json({ message: "Only cancelled orders can be deleted" });
+      return;
+    }
+
+    await order.destroy();
+    res.json({ message: "Order deleted" });
+  } catch (err) {
     next(err);
   }
 };
