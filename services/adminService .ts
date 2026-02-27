@@ -122,14 +122,14 @@ const adminService = {
   // ─── Products ──────────────────────────────────────────────
   getAllProducts: async (search?: string) => {
     const where: any = {};
-    if (search) where.title = { [Op.like]: `%${search}%` };
+    if (search) where.title = { [Op.iLike]: `%${search}%` };
     return Product.findAll({
       where,
       include: [
         {
           model: User,
           as: "seller",
-          attributes: ["id", "firstName", "lastName"],
+          attributes: ["id", "firstName", "lastName", "storeName"],
         },
         { model: ProductImage, as: "images", limit: 1 },
         {
