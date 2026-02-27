@@ -8,7 +8,7 @@ router.get("/", productController.getSellerProducts);
 router.get("/:id", productController.getSingleProduct);
 router.post(
   "/",
-  upload.array("images[]", 12),
+  upload.array("images", 12),
   (req, res, next) => {
     console.log("Uploaded files:", req.files);
     next();
