@@ -34,11 +34,18 @@ const migrateImagesToWebp = async () => {
 
   for (const image of images as any[]) {
     const oldPath: string = image.path;
-    if (oldPath.includes("f_webp") || oldPath.endsWith(".webp")) continue;
 
-    const newPath = oldPath
-      .replace("/image/upload/", "/image/upload/f_webp,q_auto/")
-      .replace(/\.(jpg|jpeg|png)$/, ".webp");
+    // skip if already migrated
+    if (oldPath.includes("f_webp")) continue;
+
+    // handle URLs with or without extension
+    let newPath = oldPath.replace(
+      "/image/upload/",
+      "/image/upload/f_webp,q_auto/",
+    );
+
+    // replace extension if present
+    newPath = newPath.replace(/\.(jpg|jpeg|png)$/, ".webp");
 
     await image.update({ path: newPath });
     console.log(`Updated: ${oldPath} → ${newPath}`);
