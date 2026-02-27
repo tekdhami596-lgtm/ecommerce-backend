@@ -4,7 +4,7 @@ import authService from "../services/authService";
 const authController = {
   signup: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log(req);
+    
       const user = await authService.signup(req);
 
       if (user) {

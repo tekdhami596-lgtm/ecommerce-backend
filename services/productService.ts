@@ -108,7 +108,7 @@ const productService = {
         {
           model: User,
           as: "seller",
-          attributes: ["id", "firstName", "lastName", "email"],
+          attributes: ["id", "firstName", "lastName", "email", "storeName",],
         },
         { model: Category, as: "categories", attributes: ["id", "title"] },
         { model: ProductImage, as: "images", attributes: ["id", "path"] },
