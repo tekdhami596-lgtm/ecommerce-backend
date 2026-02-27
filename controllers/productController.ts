@@ -11,6 +11,7 @@ const productController = {
       res.send({
         page: page,
         limit,
+        total: data.count,
         data: data.rows,
       });
     } catch (err) {
