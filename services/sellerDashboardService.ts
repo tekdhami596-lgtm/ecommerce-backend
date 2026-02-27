@@ -11,19 +11,19 @@ const sellerDashboardService = {
   getStats: async (req: Request) => {
     const sellerId = (req as any).user.id;
 
-    // Total products
+  
     const totalProducts = await Product.count({
       where: { userId: sellerId },
     });
 
-    // All seller product ids
+   
     const sellerProducts = await Product.findAll({
       where: { userId: sellerId },
       attributes: ["id"],
     });
     const productIds = sellerProducts.map((p: any) => p.id);
 
-    // Total orders & revenue from seller's products
+    
     const orderStats = (await OrderItem.findAll({
       where: { productId: { [Op.in]: productIds } },
       attributes: [
@@ -36,7 +36,7 @@ const sellerDashboardService = {
     const totalOrders = Number(orderStats[0]?.totalOrders) || 0;
     const totalRevenue = parseFloat(orderStats[0]?.totalRevenue) || 0;
 
-    // Pending payments count
+    
     const pendingOrders = await Order.count({
       include: [
         {
@@ -49,7 +49,7 @@ const sellerDashboardService = {
       where: { paymentStatus: "pending" },
     });
 
-    // Low stock products (stock < 5)
+  
     const lowStockProducts = await Product.findAll({
       where: {
         userId: sellerId,
@@ -59,7 +59,6 @@ const sellerDashboardService = {
       attributes: ["id", "title", "stock", "price"],
     });
 
-    // Top 5 selling products — step 1: get top productIds with totals
     const topRaw = (await OrderItem.findAll({
       where: { productId: { [Op.in]: productIds } },
       attributes: [
@@ -73,7 +72,6 @@ const sellerDashboardService = {
       raw: true,
     })) as any[];
 
-    // Top 5 selling products — step 2: fetch product details separately
     const topProductIds = topRaw.map((r: any) => r.productId);
     const topProductDetails = await Product.findAll({
       where: { id: { [Op.in]: topProductIds } },
@@ -81,7 +79,6 @@ const sellerDashboardService = {
       attributes: ["id", "title", "price"],
     });
 
-    // Merge totals with product details
     const topProducts = topRaw.map((r: any) => ({
       productId: r.productId,
       totalSold: Number(r.totalSold),
@@ -89,7 +86,6 @@ const sellerDashboardService = {
       product: topProductDetails.find((p: any) => p.id == r.productId) ?? null,
     }));
 
-    // Recent 5 orders
     const recentOrders = await Order.findAll({
       include: [
         {

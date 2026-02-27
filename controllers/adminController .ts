@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import adminService from "../services/adminService ";
 
 const adminController = {
-  // GET /api/admin/stats
+
   getStats: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const data = await adminService.getStats();
@@ -12,7 +12,6 @@ const adminController = {
     }
   },
 
-  // GET /api/admin/users
   getAllUsers: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { search, role } = req.query as { search?: string; role?: string };
@@ -23,7 +22,7 @@ const adminController = {
     }
   },
 
-  // DELETE /api/admin/users/:id
+
   deleteUser: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const data = await adminService.deleteUser(Number(req.params.id));
@@ -35,7 +34,7 @@ const adminController = {
     }
   },
 
-  // GET /api/admin/sellers
+
   getSellers: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const data = await adminService.getSellers();
@@ -45,7 +44,7 @@ const adminController = {
     }
   },
 
-  // DELETE /api/admin/sellers/:id
+
   deleteSeller: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const data = await adminService.deleteSeller(Number(req.params.id));
@@ -57,7 +56,7 @@ const adminController = {
     }
   },
 
-  // GET /api/admin/products
+ 
   getAllProducts: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { search } = req.query as { search?: string };
@@ -68,7 +67,6 @@ const adminController = {
     }
   },
 
-  // DELETE /api/admin/products/:id
   deleteProduct: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const data = await adminService.deleteProduct(Number(req.params.id));
@@ -80,7 +78,7 @@ const adminController = {
     }
   },
 
-  // GET /api/admin/orders
+
   getAllOrders: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { paymentStatus } = req.query as { paymentStatus?: string };
@@ -91,7 +89,7 @@ const adminController = {
     }
   },
 
-  // PATCH /api/admin/orders/:id/status
+
   updateOrderStatus: async (
     req: Request,
     res: Response,

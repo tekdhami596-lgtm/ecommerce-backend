@@ -9,13 +9,13 @@ export const signupSchema = Joi.object({
   phone: Joi.string().allow("", null).optional(),
   gender: Joi.string().valid("male", "female", "other").allow(null).optional(),
   dateOfBirth: Joi.string().allow(null, "").optional(),
-  // buyer only
+
   deliveryAddress: Joi.when("role", {
     is: "buyer",
     then: Joi.string().required(),
     otherwise: Joi.string().allow("", null).optional(),
   }),
-  // seller only
+ 
   storeName: Joi.when("role", {
     is: "seller",
     then: Joi.string().required(),

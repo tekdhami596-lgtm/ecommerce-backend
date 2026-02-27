@@ -33,7 +33,6 @@ const User = sequelize.define(
       allowNull: false,
     },
 
-    // ── Shared optional ──────────────────────────────────
     phone: {
       type: DataTypes.STRING(20),
       allowNull: true,
@@ -45,19 +44,17 @@ const User = sequelize.define(
       defaultValue: null,
     },
     dateOfBirth: {
-      type: DataTypes.DATEONLY, // stores as YYYY-MM-DD, no time component
+      type: DataTypes.DATEONLY,
       allowNull: true,
       defaultValue: null,
     },
 
-    // ── Buyer only ───────────────────────────────────────
     deliveryAddress: {
       type: DataTypes.TEXT,
       allowNull: true,
       defaultValue: null,
     },
 
-    // ── Seller only ──────────────────────────────────────
     storeName: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -69,7 +66,6 @@ const User = sequelize.define(
       defaultValue: null,
     },
 
-    // ── Password Reset ───────────────────────────────────
     resetToken: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -83,7 +79,7 @@ const User = sequelize.define(
   },
   {
     tableName: "users",
-    underscored: true, //
+    underscored: true,
     timestamps: true,
   },
 );

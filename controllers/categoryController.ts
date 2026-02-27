@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import categoryService from "../services/categoryService";
 
-// Matches the user shape set by your existing authMiddleware
+
 interface AuthRequest extends Request {
   user?: {
     id: number;
@@ -12,7 +12,7 @@ interface AuthRequest extends Request {
 }
 
 const categoryController = {
-  // GET /api/categories — public, returns nested tree
+  
   getCategories: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const categories = await categoryService.getTree();
@@ -22,7 +22,6 @@ const categoryController = {
     }
   },
 
-  // GET /api/categories/flat — public, returns flat list (useful for selects)
   getCategoriesFlat: async (
     req: Request,
     res: Response,
@@ -36,7 +35,6 @@ const categoryController = {
     }
   },
 
-  // POST /api/categories — admin + seller only
   createCategory: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const authReq = req as AuthRequest;
@@ -61,7 +59,6 @@ const categoryController = {
     }
   },
 
-  // PATCH /api/categories/:id — admin + own seller
   updateCategory: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const authReq = req as AuthRequest;
@@ -83,8 +80,7 @@ const categoryController = {
       next(err);
     }
   },
-
-  // DELETE /api/categories/:id — admin + own seller
+  
   deleteCategory: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const authReq = req as AuthRequest;
