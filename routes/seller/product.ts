@@ -9,11 +9,6 @@ router.get("/:id", productController.getSingleProduct);
 router.post(
   "/",
   upload.array("images", 12),
-  (req, res, next) => {
-    console.log("Uploaded files:", req.files);
-    next();
-  },
-
   productController.createSellerProduct,
 );
 router.delete("/:id", productController.deleteSellerProduct);
