@@ -9,17 +9,6 @@ import Cart from "../models/Cart";
 import OrderItem from "../models/OrderItem";
 import cloudinary from "../config/cloudinary";
 
-const uploadToCloudinary = (file: Express.Multer.File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    cloudinary.uploader
-      .upload_stream({ folder: "ecommerce" }, (error, result) => {
-        if (error || !result) return reject(error);
-        resolve(result.secure_url);
-      })
-      .end(file.buffer);
-  });
-};
-
 const deleteFromCloudinary = async (imageUrl: string) => {
   try {
     const parts = imageUrl.split("/");
@@ -108,7 +97,7 @@ const productService = {
         {
           model: User,
           as: "seller",
-          attributes: ["id", "firstName", "lastName", "email", "storeName",],
+          attributes: ["id", "firstName", "lastName", "email", "storeName"],
         },
         { model: Category, as: "categories", attributes: ["id", "title"] },
         { model: ProductImage, as: "images", attributes: ["id", "path"] },
@@ -210,14 +199,13 @@ const productService = {
     }
 
     if (files && files.length > 0) {
-      const uploadPromises = files.map(async (file) => {
-        const cloudinaryUrl = await uploadToCloudinary(file);
-        return ProductImage.create({
+      const imagePromises = files.map((file) =>
+        ProductImage.create({
           productId: product.getDataValue("id"),
-          path: cloudinaryUrl,
-        });
-      });
-      await Promise.all(uploadPromises);
+          path: file.path, // Cloudinary URL, already uploaded
+        }),
+      );
+      await Promise.all(imagePromises);
     }
   },
 
@@ -238,10 +226,9 @@ const productService = {
 
     if (files && files.length > 0) {
       const uploadPromises = files.map(async (file) => {
-        const cloudinaryUrl = await uploadToCloudinary(file);
         return ProductImage.create({
           productId: product.getDataValue("id"),
-          path: cloudinaryUrl,
+          path: file.path,
         });
       });
       await Promise.all(uploadPromises);
