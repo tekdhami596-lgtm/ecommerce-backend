@@ -33,8 +33,8 @@ const productService = {
     let priceFrom: number = (req.query.priceFrom as unknown as number) || 0;
     let priceTo: number =
       (req.query.priceTo as unknown as number) || 999999999999;
-    let page: number = (req.query.page as unknown as number) || 1;
-    let limit: number = (req.query.limit as unknown as number) || 10;
+    let page: number = parseInt(req.query.page as unknown as string) || 1;
+    let limit: number = parseInt(req.query.limit as unknown as string) || 10;
     let offset = (page - 1) * limit;
 
     let categoryIds: number[] | undefined;
