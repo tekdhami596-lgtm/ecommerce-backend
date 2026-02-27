@@ -29,15 +29,6 @@ app.use("/api", approutes);
 
 const PORT = process.env.PORT || 8001;
 
-const checkConnectionDB = async () => {
-  try {
-    await sequelize.authenticate();
-    await sequelize.sync();
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
-  }
-};
-
 const migrateImagesToWebp = async () => {
   const images = await ProductImage.findAll();
 
@@ -56,7 +47,16 @@ const migrateImagesToWebp = async () => {
   console.log("Migration complete ✅");
 };
 
+const checkConnectionDB = async () => {
+  try {
+    await sequelize.authenticate();
+    await sequelize.sync();
+    await migrateImagesToWebp();
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
+};
+
 checkConnectionDB();
-migrateImagesToWebp();
 
 export default app;
