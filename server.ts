@@ -29,36 +29,10 @@ app.use("/api", approutes);
 
 const PORT = process.env.PORT || 8001;
 
-const migrateImagesToWebp = async () => {
-  const images = await ProductImage.findAll();
-
-  for (const image of images as any[]) {
-    const oldPath: string = image.path;
-
-    // skip if already migrated
-    if (oldPath.includes("f_webp")) continue;
-
-    // handle URLs with or without extension
-    let newPath = oldPath.replace(
-      "/image/upload/",
-      "/image/upload/f_webp,q_auto/",
-    );
-
-    // replace extension if present
-    newPath = newPath.replace(/\.(jpg|jpeg|png)$/, ".webp");
-
-    await image.update({ path: newPath });
-    console.log(`Updated: ${oldPath} → ${newPath}`);
-  }
-
-  console.log("Migration complete ✅");
-};
-
 const checkConnectionDB = async () => {
   try {
     await sequelize.authenticate();
     await sequelize.sync();
-    await migrateImagesToWebp();
   } catch (error) {
     console.error("Unable to connect to the database:", error);
   }

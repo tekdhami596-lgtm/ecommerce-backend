@@ -13,7 +13,8 @@ const storage = new CloudinaryStorage({
   params: {
     folder: "uploads",
     allowed_formats: ["webp", "jpg", "jpeg", "png"],
-    transformation: [{ format: "webp", quality: "auto" }],
+    format: "webp",
+    transformation: [{ quality: "auto" }],
   } as any,
 });
 
