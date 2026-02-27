@@ -8,12 +8,15 @@ import cookieParser from "cookie-parser";
 import "./models/index";
 import sequelize from "./connections/db";
 import cloudinary from "./config/cloudinary";
+import ProductImage from "./models/ProductImage";
 
 const app = express();
 
 app.use(
   cors({
-    origin:process.env.FRONTEND_URL || "https://ecommerce-frontend-six-teal.vercel.app",
+    origin:
+      process.env.FRONTEND_URL ||
+      "https://ecommerce-frontend-six-teal.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   }),
@@ -35,6 +38,25 @@ const checkConnectionDB = async () => {
   }
 };
 
+const migrateImagesToWebp = async () => {
+  const images = await ProductImage.findAll();
+
+  for (const image of images as any[]) {
+    const oldPath: string = image.path;
+    if (oldPath.includes("f_webp") || oldPath.endsWith(".webp")) continue;
+
+    const newPath = oldPath
+      .replace("/image/upload/", "/image/upload/f_webp,q_auto/")
+      .replace(/\.(jpg|jpeg|png)$/, ".webp");
+
+    await image.update({ path: newPath });
+    console.log(`Updated: ${oldPath} → ${newPath}`);
+  }
+
+  console.log("Migration complete ✅");
+};
+
 checkConnectionDB();
+migrateImagesToWebp();
 
 export default app;
