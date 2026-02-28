@@ -9,22 +9,31 @@ import orderRoutes from "./order";
 import adminRoutes from "./admin";
 import roleMiddleware from "../middlewares/RoleMiddleware";
 import bannerController from "../controllers/bannerController";
+import {
+  adminLimiter,
+  authLimiter,
+  checkoutLimiter,
+  publicLimiter,
+  sellerLimiter,
+  userActionLimiter,
+} from "../middlewares/rateLimiter";
 
 const router = Router();
 
-router.use("/auth", authRoute);
-router.use("/products", productRoute);
-router.use("/seller", checkAuthentication, SellerRoutes);
-router.use("/categories", CategoryRoute);
-router.use("/carts", checkAuthentication, cartRoutes);
-router.use("/orders", checkAuthentication, orderRoutes);
+router.use("/auth", authLimiter, authRoute);
+router.use("/products", publicLimiter, productRoute);
+router.use("/seller", sellerLimiter, checkAuthentication, SellerRoutes);
+router.use("/categories", publicLimiter, CategoryRoute);
+router.use("/carts", userActionLimiter, checkAuthentication, cartRoutes);
+router.use("/orders", checkoutLimiter, checkAuthentication, orderRoutes);
 router.use(
   "/admin",
+  adminLimiter,
   checkAuthentication,
   roleMiddleware(["admin"]),
   adminRoutes,
 );
 // In your public routes
-router.get("/banners", bannerController.getAll);
+router.get("/banners", publicLimiter, bannerController.getAll);
 
 export default router;
