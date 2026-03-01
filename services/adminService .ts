@@ -126,8 +126,37 @@ const adminService = {
       where: { id, role: "seller" },
     })) as any;
     if (!seller) throw { status: 404, message: "Seller not found" };
+
+    const products = await Product.findAll({ where: { sellerId: id } });
+
+    for (const product of products as any[]) {
+      // Block if product has order history
+      const orderedItems = await OrderItem.findAll({
+        where: { productId: product.id },
+      });
+      if (orderedItems.length > 0) {
+        throw {
+          status: 400,
+          message:
+            "Cannot delete this seller because their products have existing order history.",
+        };
+      }
+
+      // Clean up cart + images
+      await Cart.destroy({ where: { productId: product.id } });
+      const images = await ProductImage.findAll({
+        where: { productId: product.id },
+      });
+      for (const image of images as any[]) {
+        const imagePath = path.join(__dirname, "..", image.path);
+        if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
+      }
+      await ProductImage.destroy({ where: { productId: product.id } });
+      await product.destroy();
+    }
+
     await seller.destroy();
-    return { message: "Seller deleted" };
+    return { message: "Seller and their products deleted" };
   },
 
   // ─── Products ──────────────────────────────────────────────
