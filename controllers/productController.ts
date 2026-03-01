@@ -22,6 +22,11 @@ const productController = {
   getSingleProduct: async (req: Request, res: Response, next: NextFunction) => {
     try {
       let data = await productService.getSingleProduct(req);
+      if (!data) {
+        return res
+          .status(404)
+          .send({ message: "Product not found or no longer available" });
+      }
       res.send({
         data: data,
       });

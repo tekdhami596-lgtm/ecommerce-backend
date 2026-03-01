@@ -66,7 +66,7 @@ const productService = {
 
     return await Product.findAndCountAll({
       include: [
-        { model: User, as: "seller", attributes: ["id"] },
+        { model: User, as: "seller", attributes: ["id"], required: true },
         {
           model: Category,
           as: "categories",
@@ -92,18 +92,20 @@ const productService = {
 
   getSingleProduct: async (req: Request) => {
     let id = req.params.id as unknown as number;
-    return await Product.findByPk(id, {
+    const product = await Product.findByPk(id, {
       include: [
         {
           model: User,
           as: "seller",
           attributes: ["id", "firstName", "lastName", "email", "storeName"],
+          required: true, 
         },
         { model: Category, as: "categories", attributes: ["id", "title"] },
         { model: ProductImage, as: "images", attributes: ["id", "path"] },
       ],
       attributes: { exclude: ["userId", "updatedAt"] },
     });
+    return product; 
   },
 
   getSellerProducts: async (req: Request) => {
