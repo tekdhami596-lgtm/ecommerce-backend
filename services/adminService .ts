@@ -72,9 +72,9 @@ const adminService = {
     if (role && role !== "all") where.role = role;
     if (search) {
       where[Op.or] = [
-        { firstName: { [Op.like]: `%${search}%` } },
-        { lastName: { [Op.like]: `%${search}%` } },
-        { email: { [Op.like]: `%${search}%` } },
+        { firstName: { [Op.iLike]: `%${search}%` } },
+        { lastName: { [Op.iLike]: `%${search}%` } },
+        { email: { [Op.iLike]: `%${search}%` } },
       ];
     }
     return User.findAll({
@@ -89,6 +89,17 @@ const adminService = {
     if (!user) throw { status: 404, message: "User not found" };
     if (user.role === "admin")
       throw { status: 403, message: "Cannot delete admin" };
+
+    if (user.role === "buyer") {
+      const orders = await Order.findAll({ where: { buyerId: id } });
+      if (orders.length > 0) {
+        throw {
+          status: 400,
+          message: "Cannot delete this user because they have existing orders.",
+        };
+      }
+      await Cart.destroy({ where: { userId: id } });
+    }
     await user.destroy();
     return { message: "User deleted" };
   },
