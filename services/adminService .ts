@@ -91,7 +91,7 @@ const adminService = {
       throw { status: 403, message: "Cannot delete admin" };
 
     if (user.role === "buyer") {
-      const orders = await Order.findAll({ where: { buyerId: id } });
+      const orders = await Order.findAll({ where: { userId: id } });
       if (orders.length > 0) {
         throw {
           status: 400,
