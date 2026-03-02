@@ -34,6 +34,7 @@ export default {
       businessAddress,
     } = req.body;
 
+
     const hashed = await bcrypt.hash(password, 10);
 
     return await User.create({

@@ -9,6 +9,7 @@ import "./models/index";
 import sequelize from "./connections/db";
 import cloudinary from "./config/cloudinary";
 import ProductImage from "./models/ProductImage";
+import errorHandler from "./middlewares/errorHandlers";
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", approutes);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 8001;
 

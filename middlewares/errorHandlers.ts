@@ -15,7 +15,7 @@ const errorHandler = (
   _next: NextFunction,
 ) => {
   console.error("=== ERROR ===", err);
-  
+
   if (err instanceof ValidationError) {
     const errors = err.errors.map((e) => ({
       field: e.path,
@@ -32,15 +32,13 @@ const errorHandler = (
     });
   }
 
-
   if (err instanceof DatabaseError) {
     return res.status(400).json({
       success: false,
       message: err.message,
-      detail: (err as any).original?.detail, 
+      detail: (err as any).original?.detail,
     });
   }
-
 
   if (err instanceof ConnectionError || err instanceof TimeoutError) {
     return res.status(503).json({
@@ -49,7 +47,6 @@ const errorHandler = (
     });
   }
 
-
   if (err instanceof JsonWebTokenError) {
     return res.status(401).json({
       success: false,
@@ -57,7 +54,7 @@ const errorHandler = (
     });
   }
 
-  
+
   if (err instanceof Error) {
     return res.status(500).json({
       success: false,
